@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/java-helpers" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/java-helpers/build/timeline-analyzer-builder/rdf4j-class-builder" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/java-helpers/build/timeline-analyzer-builder/rdf4j-vocab-builder" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/java-helpers/build/timeline-analyzer-builder/sqljet" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/java-helpers/build/timeline-analyzer-builder/timeline-analyzer" vcs="Git" />
+  </component>
+</project>

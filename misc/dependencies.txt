@@ -1,0 +1,30 @@
+python-dateutil
+dfdatetime
+artifacts
+pefile
+dtfabric
+
+# require by winreg
+dfwinreg
+pyyaml
+libfwsi-python
+libregf-python
+#$ apt -y install python-libfwsi python-libregf
+
+# required by Tarzan for Python 2/3 compatibility
+future
+
+# required by Plaso to generate events
+pytz
+
+# required by PySpark HDFS access
+#pyarrow
+#$ apt -y install pyarrow
+
+# required by PySpark Plaso WebAPI
+paste
+flask
+cherrypy
+
+# reauired by cherrypy
+zc.lockfile

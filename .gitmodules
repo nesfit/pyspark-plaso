@@ -1,0 +1,3 @@
+[submodule "java-helpers"]
+	path = java-helpers
+	url = https://github.com/nesfit/pyspark-plaso-java-helpers.git
