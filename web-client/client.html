@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://unpkg.com/feather-icons"></script>
+	<style type="text/css">
+		.upload-content {
+			padding: 1em;
+		}
+	</style>
+	<title>pyspark-plaso</title>
+</head>
+<body>
+
+<header>
+	<div class="jumbotron">
+		<h1 class="display-4">pyspark-plaso</h1>
+		<p class="lead">Web Client</p>
+		<hr class="my-4">
+		<!--<p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+		<a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>-->
+	</div>
+</header>
+
+<div class="container-fluid">
+
+<form>
+  <div class="form-group row">
+    <label for="inputCurPath" class="col-sm-1 col-form-label">HDFS Path</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputCurPath">
+    </div>
+    <div class="col-sm-1">
+      <input type="submit" class="btn btn-primary mb-2" id="curPathSubmit" value="Refresh">
+    </div>
+  </div>
+</form>
+
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-browse-tab" data-toggle="tab" href="#nav-browse" role="tab" aria-controls="nav-browse" aria-selected="true">Browse</a>
+    <a class="nav-item nav-link" id="nav-upload-tab" data-toggle="tab" href="#nav-upload" role="tab" aria-controls="nav-upload" aria-selected="false">Upload</a>
+  </div>
+</nav>
+
+<div class="tab-content" id="nav-tabContent">
+  <!-- Browse tab -->
+  <div class="tab-pane fade show active" id="nav-browse" role="tabpanel" aria-labelledby="nav-browse-tab">
+	
+	<table class="table" id="tabFileList">
+	<thead class="thead-dark">
+		<tr>
+		<th scope="col">Path</th>
+		<th scope="col">File</th>
+		<th scope="col">Actions</th>
+		</tr>
+	</thead>
+	<tbody id="fileList">
+		<tr>
+		<td>/Users/test</td>
+		<td>History</td>
+		<td>
+			<a href="#" title="download" class="text-primary"><i data-feather="download"></i></a>
+			<a href="#" title="download zip" class=""><i data-feather="package"></i></a>
+			<a href="#" title="delete" class="text-danger"><i data-feather="trash-2"></i></a>
+		</td>
+		</tr>
+	</tbody>
+	</table>
+
+  </div>
+
+  <!-- Upload tab -->
+  <div class="tab-pane fade" id="nav-upload" role="tabpanel" aria-labelledby="nav-upload-tab">
+
+	<div class="upload-content">
+	<form>
+	<div class="form-group">
+		<label for="inputUploadFile">Upload a single file</label>
+		<input type="file" class="form-control-file" id="inputUploadFile">
+	</div>
+	</form>
+
+	<form>
+	<div class="form-group">
+		<label for="inputUploadZip">Upload a ZIP archive</label>
+		<input type="file" class="form-control-file" id="inputUploadZip">
+	</div>
+	</form>
+	</div>
+
+  </div>
+</div>
+
+
+</div> <!-- .container-fluid -->
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script>
+feather.replace()
+
+let hdfsPath = '/';
+
+let refresh = function() {
+	alert('refresh ' + hdfsPath);
+};
+
+$(function(){
+
+	$('#inputCurPath').val(hdfsPath);
+	$('#curPathSubmit').click(function() {
+		hdfsPath = $('#inputCurPath').val();
+		refresh();
+		return false;
+	});
+
+});
+</script>
+</body>
+</html>
