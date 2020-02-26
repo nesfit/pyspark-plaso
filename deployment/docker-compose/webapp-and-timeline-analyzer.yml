@@ -13,7 +13,7 @@ services:
       - WEBUI_PORT=4040
     ports:
       - "4040:4040"
-      - "5432:5432"
+      - "54380:54380"
     volumes:
       - type: bind
         source: ./volumes/app

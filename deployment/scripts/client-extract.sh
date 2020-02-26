@@ -1,6 +1,6 @@
 #!/bin/sh
 
-URL_DEFAULT="http://0.0.0.0:5432/"
+URL_DEFAULT="http://0.0.0.0:54380/"
 
 if [ "${1:0:6}" = "--url=" ]; then
 	URL="${1:6}"

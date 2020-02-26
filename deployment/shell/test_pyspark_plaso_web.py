@@ -28,7 +28,7 @@ if __name__ == "__main__":
     cherrypy.config.update({
         'engine.autoreload.on': True,
         'log.screen': True,
-        'server.socket_port': 5432,
+        'server.socket_port': 54380,
         'server.socket_host': '0.0.0.0'
     })
 
