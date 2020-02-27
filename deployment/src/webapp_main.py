@@ -25,7 +25,9 @@ if __name__ == "__main__":
         'engine.autoreload.on': True,
         'log.screen': True,
         'server.socket_port': 54380,
-        'server.socket_host': '0.0.0.0'
+        'server.socket_host': '0.0.0.0',
+        # remove size-limit for file uploads
+        'server.max_request_body_size': 0,
     })
 
     # Start the CherryPy WSGI web server
