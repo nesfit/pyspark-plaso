@@ -1,6 +1,9 @@
 *~
 *.pyc
 
+# Test data-set fetched from the log2timeline/Plaso repository by fetch-test-data-plaso.sh
+/test_data/plaso
+
 # Python VirtualEnv directory, created by make-virtual-env.sh in pyspark
 /venv
 
