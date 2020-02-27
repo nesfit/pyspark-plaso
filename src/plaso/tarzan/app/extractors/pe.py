@@ -42,7 +42,7 @@ class PE(Extractor):
         mediator = BufferedMediator()
         # parse and read results
         parser.Parse(mediator, input_file)
-        return mediator.flush_buffer(exception_on_error=True)
+        return mediator.flush_buffer(exception_on_error=False)
 
 
 Manager.register_extractor(PE)

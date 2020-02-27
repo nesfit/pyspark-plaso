@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Tarzan Plaso SQLite extractor"""
 
+import os
+
 from plaso.tarzan.app.extractors.extractor import Extractor
 from plaso.tarzan.app.extractors.manager import Manager
 
@@ -20,7 +22,8 @@ class SQLite(Extractor):
         :param path: the file-path to check
         :return: True iff it is an SQLite file
         """
-        return path.endswith((".sqlite", "/History"))
+        head_tail = os.path.split(path)
+        return head_tail[1].endswith((".sqlite", ".db")) or head_tail[1].startswith(("History-")) or (head_tail[1] == "History")
 
     @classmethod
     def extract(cls, path):
@@ -42,7 +45,7 @@ class SQLite(Extractor):
         mediator.SetFileEntry(file_entry)
         # parse and read results
         parser.Parse(mediator)
-        return mediator.flush_buffer(exception_on_error=True)
+        return mediator.flush_buffer(exception_on_error=False)
 
 
 Manager.register_extractor(SQLite)
