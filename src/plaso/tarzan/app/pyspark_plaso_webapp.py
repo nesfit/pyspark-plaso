@@ -24,6 +24,13 @@ def app_list_routes():
                     status=200,
                     mimetype="text/html")
 
+@app.after_request
+def add_header(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    response.headers.add('Access-Control-Allow-Headers', 'Accept, Authorization, Cache-Control, Content-Type, Origin, X-Csrf-Token, X-Requested-With')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE')
+    return response
 
 def configure_app(spark_context, hdfs_uri):
     # HDFS
