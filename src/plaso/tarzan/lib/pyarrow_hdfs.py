@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 import os
 
 from pyarrow import HadoopFileSystem, HdfsFile
@@ -127,12 +129,13 @@ class PyArrowHdfs(Hdfs):
         status_items = filesystem.ls(path=simple_path, detail=True)
         result = []
         for file_status in status_items:
+            file_name = file_status["name"].decode("utf-8")
             if file_status["kind"] == "file":
-                result.append(self.make_qualified_path(file_status["name"], filesystem))
+                result.append(self.make_qualified_path(file_name, filesystem))
             elif file_status["kind"] == "directory":
                 if include_dir_names:
-                    result.append(self.make_qualified_path(file_status["name"], filesystem) + "/")
-                result.extend(self.list_files(file_status["name"], recursion_level - 1, include_dir_names, filesystem))
+                    result.append(self.make_qualified_path(file_name, filesystem) + "/")
+                result.extend(self.list_files(file_name, recursion_level - 1, include_dir_names, filesystem))
         return result
 
     def open_inputstream(self, path, filesystem=None):

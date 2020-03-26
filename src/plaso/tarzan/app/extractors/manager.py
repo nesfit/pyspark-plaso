@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """The extractors manager"""
 
+from __future__ import unicode_literals
+
 from extractor import Extractor
 
 

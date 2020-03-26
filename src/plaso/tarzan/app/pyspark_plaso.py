@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """PySpark Plaso processor"""
 
+from __future__ import unicode_literals
+
 from pyspark import SparkContext
 from pyspark.mllib.common import _py2java
 from pyspark.rdd import RDD
