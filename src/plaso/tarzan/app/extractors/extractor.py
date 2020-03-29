@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Tarzan Plaso Dummy extractor"""
 
+from __future__ import unicode_literals
 
 class Extractor(object):
     """

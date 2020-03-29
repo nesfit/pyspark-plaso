@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Tarzan Plaso SQLite extractor"""
 
+from __future__ import unicode_literals
+
 import os
 
 from plaso.tarzan.app.extractors.extractor import Extractor

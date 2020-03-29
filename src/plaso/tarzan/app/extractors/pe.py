@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Tarzan Plaso PE extractor"""
 
+from __future__ import unicode_literals
+
 from plaso.tarzan.app.extractors.extractor import Extractor
 from plaso.tarzan.app.extractors.manager import Manager
 
