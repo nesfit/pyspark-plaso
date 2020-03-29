@@ -34,4 +34,30 @@ class ApiClient {
 		return this.API_ROOT + 'zip' + hdfsPath;
 	}
 
+	mkdir(hdfsPath, dirname) {
+		console.log('mkdir ' + hdfsPath + ' ' + dirname)
+		const url = this.API_ROOT + 'file' + hdfsPath + dirname;
+		fetch(url, { method: 'POST' })
+			.then()
+			.catch(() => console.error('colud not create dir'));
+	}
+
+	async uploadFile(hdfsPath, formData) {
+		const url = this.API_ROOT + 'file' + hdfsPath + formData.name;
+		const response = await fetch(url, {
+			method: 'POST',
+			body: formData
+		});
+		return await response.text();
+	}
+
+	async uploadZip(hdfsPath, formData) {
+		const url = this.API_ROOT + 'zip' + hdfsPath;
+		const response = await fetch(url, {
+			method: 'POST',
+			body: formData
+		});
+		return await response.text();
+	}
+
 }

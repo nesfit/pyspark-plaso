@@ -1,5 +1,5 @@
 let hdfsPath = '/';
-hdfsPath = '/test_data/docker/';
+//hdfsPath = '/test_data/docker/';
 let client = new ApiClient();
 
 let showFileList = function(list, hdfsPath) {
@@ -128,6 +128,10 @@ let chdir = function(hdfsPath) {
 	refresh(hdfsPath);
 };
 
+let mkdir = function(destDir) {
+	console.log('mkdir ' + destDir);
+}
+
 let rmdir = function(destDir) {
 	console.log('rmdir ' + destDir);
 }
@@ -167,19 +171,69 @@ let concatPath = function(base, name) {
 	}
 };
 
+let getCwd = function() {
+	let cwd = $('#inputCurPath').val();
+	if (!cwd.endsWith('/')) {
+		cwd += '/';
+		$('#inputCurPath').val(cwd);
+	}
+	return cwd;
+};
+
+let showMsg = function(dest, type, text) {
+	dest.empty();
+	dest.append($('<div class="alert" role="alert"></div>').addClass(type).text(text));
+	setTimeout(function() {
+		dest.empty();
+	}, 5000);
+};
+
 //======================================================================================
 
 $(function(){
 
 	$('#inputCurPath').val(hdfsPath);
 	$('#curPathSubmit').click(function() {
-		hdfsPath = $('#inputCurPath').val();
-		if (!hdfsPath.endsWith('/')) {
-			hdfsPath += '/';
-			$('#inputCurPath').val(hdfsPath);
-		}
-		refresh(hdfsPath);
+		refresh(getCwd());
 		return false;
+	});
+
+	$('#buttonMkdir').click(function() {
+		var dirname = $('#inputMkdir').val();
+		if (!dirname.endsWith('/')) {
+			dirname += '/';
+		}
+		client.mkdir(getCwd(), dirname);
+		refresh(getCwd());
+		showMsg($('#messagesMkdir'), 'alert-success', 'Folder created');
+	});
+
+	$('#buttonUploadFile').click(function() {
+		const files = document.getElementById('inputUploadFile').files;
+		client.uploadFile(getCwd(), files[0])
+			.then(msg => {
+				console.log(msg);
+				showMsg($('#messagesUploadFile'), 'alert-success', msg);
+				refresh(getCwd());
+			})
+			.catch(error => {
+				console.error(error)
+				showMsg($('#messagesUploadFile'), 'alert-error', error);
+			})
+	});
+
+	$('#buttonUploadZip').click(function() {
+		const files = document.getElementById('inputUploadZip').files;
+		client.uploadZip(getCwd(), files[0])
+			.then(msg => {
+				console.log(msg);
+				showMsg($('#messagesUploadZip'), 'alert-success', msg);
+				refresh(getCwd());
+			})
+			.catch(error => {
+				console.error(error)
+				showMsg($('#messagesUploadZip'), 'alert-error', error);
+			})
 	});
 
 	refresh(hdfsPath);
