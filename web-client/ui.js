@@ -1,4 +1,4 @@
-let hdfsPath = '/';
+let currentHdfsPath = '/';
 //hdfsPath = '/test_data/docker/';
 let client = new ApiClient();
 
@@ -111,9 +111,16 @@ let addFileRow = function(parent, name, hdfsPath) {
 };
 
 let refresh = function(hdfsPath) {
-	client.getLs(hdfsPath).then((list) => {
-		showFileList(list, hdfsPath);
-	});
+	client.getLs(hdfsPath)
+		.then((list) => {
+			showFileList(list, hdfsPath);
+			currentHdfsPath = hdfsPath;
+			return true;
+		})
+		.catch((error) => {
+			console.error(error);
+			return false;
+		});
 };
 
 //======================================================================================
@@ -194,9 +201,11 @@ let showMsg = function(dest, type, text) {
 
 $(function(){
 
-	$('#inputCurPath').val(hdfsPath);
+	$('#inputCurPath').val(currentHdfsPath);
 	$('#curPathSubmit').click(function() {
-		refresh(getCwd());
+		if (!refresh(getCwd())) {
+			$('#inputCurPath').val(currentHdfsPath); //chdir failed, revert the path
+		}
 		return false;
 	});
 
@@ -242,6 +251,6 @@ $(function(){
 		runExtraction(getCwd());
 	});
 
-	refresh(hdfsPath);
+	refresh(currentHdfsPath);
 
 });
