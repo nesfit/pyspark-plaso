@@ -128,16 +128,16 @@ let chdir = function(hdfsPath) {
 	refresh(hdfsPath);
 };
 
-let mkdir = function(destDir) {
-	console.log('mkdir ' + destDir);
-}
-
 let rmdir = function(destDir) {
 	console.log('rmdir ' + destDir);
+	client.rmdir(destDir);
+	refresh(getCwd());
 }
 
 let rm = function(destFile) {
 	console.log('rm ' + destFile);
+	client.rm(destFile);
+	refresh(getCwd());
 }
 
 let getZip = function(path) {
@@ -146,8 +146,6 @@ let getZip = function(path) {
 };
 
 let getFile = function(path) {
-	//console.log('getFile ' + path);
-	//client.downloadFile(path);
 	window.open(client.fileLink(path), '_blank');
 };
 
