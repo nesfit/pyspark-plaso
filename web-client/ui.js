@@ -149,6 +149,10 @@ let getFile = function(path) {
 	window.open(client.fileLink(path), '_blank');
 };
 
+let runExtraction = function(path) {
+	window.open(client.extractLink(path), '_blank');
+};
+
 //======================================================================================
 // Utils
 
@@ -232,6 +236,10 @@ $(function(){
 				console.error(error)
 				showMsg($('#messagesUploadZip'), 'alert-error', error);
 			})
+	});
+
+	$('#buttonExec').click(function() {
+		runExtraction(getCwd());
 	});
 
 	refresh(hdfsPath);

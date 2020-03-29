@@ -49,6 +49,7 @@
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
     <a class="nav-item nav-link active" id="nav-browse-tab" data-toggle="tab" href="#nav-browse" role="tab" aria-controls="nav-browse" aria-selected="true">Browse</a>
     <a class="nav-item nav-link" id="nav-upload-tab" data-toggle="tab" href="#nav-upload" role="tab" aria-controls="nav-upload" aria-selected="false">Upload</a>
+    <a class="nav-item nav-link" id="nav-exec-tab" data-toggle="tab" href="#nav-exec" role="tab" aria-controls="nav-exec" aria-selected="false">Extraction</a>
   </div>
 </nav>
 
@@ -82,7 +83,7 @@
   <!-- Upload tab -->
   <div class="tab-pane fade" id="nav-upload" role="tabpanel" aria-labelledby="nav-upload-tab">
 
-	<div class="upload-content">
+	<div class="tab-content upload-content">
 	<form>
 	<div class="form-group">
 		<label for="inputUploadFile">Upload a single file</label>
@@ -110,6 +111,19 @@
 		<div class="messages" id="messagesMkdir"></div>
 	</div>
 	</form>
+	</div>
+
+	<!-- Exec tab -->
+  <div class="tab-pane fade" id="nav-exec" role="tabpanel" aria-labelledby="nav-exec-tab">
+
+	<div class="tab-content exec-content">
+		<form>
+			<div class="form-group">
+				<input type="button" class="btn btn-primary" value="Execute extraction" id="buttonExec">
+			</div>
+		</form>
+	</div>
+
 	</div>
 
 </div>

@@ -34,6 +34,10 @@ class ApiClient {
 		return this.API_ROOT + 'zip' + hdfsPath;
 	}
 
+	extractLink(hdfsPath) {
+		return this.API_ROOT + 'extract' + hdfsPath;
+	}
+
 	async uploadFile(hdfsPath, formData) {
 		const url = this.API_ROOT + 'file' + hdfsPath + formData.name;
 		const response = await fetch(url, {
