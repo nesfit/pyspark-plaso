@@ -3,6 +3,8 @@
 
 from __future__ import unicode_literals
 
+
+import json
 from pyspark import SparkContext
 from pyspark.mllib.common import _py2java
 from pyspark.rdd import RDD
@@ -90,14 +92,46 @@ class PySparkPlaso(object):
         halyard_rdd_class.saveToHalyard(java_events_rdd, table_name, hbase_zk_quorum, hbase_zk_port)
 
     @staticmethod
-    def action_events_rdd_by_collecting_into_json(sc, events_rdd):
-        # type: (SparkContext, RDD) -> str
+    def json_dumper(obj):
+        # type: (object) -> str
+        """
+        Dumps value of the object as a string which is useful as json.dumps default function to get a JSON serializable value.
+        :param obj: the object to dump
+        """
+        import inspect
+        # a vriable without a dictionary is just converted to string
+        if not hasattr(obj, '__dict__'):
+            return str(obj)
+        # otherwise, use the dictionary
+        result = obj.__dict__
+        # for a class instance, save its fully qualified class name
+        if not inspect.isroutine(obj) and not inspect.isclass(obj):
+            result["__class__"] = "{0}.{1}".format(obj.__class__.__module__, obj.__class__.__name__)
+        return result
+
+    @staticmethod
+    def transform_events_rdd_into_json_rdd(events_rdd):
+        # type: (RDD) -> RDD
+        """
+        Transform a given RDD with (HDFS URI, event) pairs into an RDD with JSON documents for each pair.
+        :param events_rdd: the RDD of (HDFS URI, event) paris to transform
+        :return the RDD of JSON documents
+        """
+        json_dumps_rdd = events_rdd.map(lambda event: json.dumps(event,
+            default=PySparkPlaso.json_dumper,
+            indent=2,
+            separators=(',', ': '),
+            sort_keys=True
+        ))
+        return json_dumps_rdd
+
+    @staticmethod
+    def action_events_rdd_by_collecting_into_json(events_rdd):
+        # type: (RDD) -> str
         """
         Collects the content of a given RDD with (HDFS URI, event) pairs into a JSON documents collection.
-        :param sc: Spark Context of the RDD
-        :param events_rdd: the RDD of (HDFS URI, event) paris to save
+        :param events_rdd: the RDD of (HDFS URI, event) paris to collect
         :return the JSON documents collection as a string
         """
-        java_events_rdd = _py2java(sc, events_rdd)
-        json_rdd_class = PySparkPlaso.get_java_rdd_helpers_package(sc).JsonRDD
-        return json_rdd_class.collectToJsonCollection(java_events_rdd)
+        json_dumps_rdd = PySparkPlaso.transform_events_rdd_into_json_rdd(events_rdd)
+        return "[\n" + ",\n".join(json_dumps_rdd.collect()) + "\n]"

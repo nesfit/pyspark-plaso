@@ -36,7 +36,7 @@ class PlasoController(Controller):
         events_rdd = PySparkPlaso.transform_files_rdd_to_extracted_events_rdd(self.spark_context, files_rdd)
         try:
             result = Response(
-                response=PySparkPlaso.action_events_rdd_by_collecting_into_json(self.spark_context, events_rdd),
+                response=PySparkPlaso.action_events_rdd_by_collecting_into_json(events_rdd),
                 status=200,
                 mimetype="application/json",
                 headers={"Content-Disposition": "inline;filename=extracted_events.json"})
