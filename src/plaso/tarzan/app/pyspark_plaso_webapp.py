@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from flask import Flask, Response
 
+from plaso.tarzan.app.views.extract2halyardview import ExtractToHalyardView
 from plaso.tarzan.app.views.extractview import ExtractView
 from plaso.tarzan.app.views.hdfsfileformview import HdfsFileFormView
 from plaso.tarzan.app.views.hdfsfileview import HdfsFileView
@@ -26,13 +27,16 @@ def app_list_routes():
                     status=200,
                     mimetype="text/html")
 
+
 @app.after_request
 def add_header(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
-    response.headers.add('Access-Control-Allow-Headers', 'Accept, Authorization, Cache-Control, Content-Type, Origin, X-Csrf-Token, X-Requested-With')
+    response.headers.add('Access-Control-Allow-Headers',
+                         'Accept, Authorization, Cache-Control, Content-Type, Origin, X-Csrf-Token, X-Requested-With')
     response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE')
     return response
+
 
 def configure_app(spark_context, hdfs_uri):
     # HDFS
@@ -57,4 +61,9 @@ def configure_app(spark_context, hdfs_uri):
     extract_view = ExtractView.as_view(str('plaso_extract'), hdfs_base_uri=hdfs_uri, spark_context=spark_context)
     app.add_url_rule('/extract/', defaults={'hdfs_path': ""}, view_func=extract_view, methods=['GET', ])
     app.add_url_rule('/extract/<path:hdfs_path>', view_func=extract_view, methods=['GET', ])
+    extract2halyard_view = ExtractToHalyardView.as_view(str('plaso_extract_to_halyard'), hdfs_base_uri=hdfs_uri,
+                                                        spark_context=spark_context)
+    app.add_url_rule('/extract-to-halyard/', defaults={'hdfs_path': ""}, view_func=extract2halyard_view,
+                     methods=['GET', ])
+    app.add_url_rule('/extract-to-halyard/<path:hdfs_path>', view_func=extract2halyard_view, methods=['GET', ])
     return app

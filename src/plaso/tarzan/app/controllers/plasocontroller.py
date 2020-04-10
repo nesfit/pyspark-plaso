@@ -45,7 +45,29 @@ class PlasoController(Controller):
                 response="Error on the extraction: %s" % e,
                 status=400,
                 mimetype="text/plain")
-        # TODO: remove when ready to save URIs
-        # pure_events_rdd = events_rdd.map(lambda uri_event_pair: uri_event_pair[1])
-        # PySparkPlaso.action_events_rdd_by_saving_into_halyard(pure_events_rdd, "plaso_sqlite_test", "zookeeper", 2181)
+        return result
+
+    def extract_to_halyard(self, hdfs_path=""):
+        # type: (str) -> Response
+        """
+        Run Plaso Extractors on a given HDFS path to generate events and store them into Halyard.
+        :param hdfs_path: the path where to extract events from
+        :return: the Flask Response with the processing time in nanoseconds
+        """
+        hdfs_uri = self.make_hdfs_uri(hdfs_path)
+        files_rdd = PySparkPlaso.create_files_rdd(self.spark_context, hdfs_uri)
+        events_rdd = PySparkPlaso.transform_files_rdd_to_extracted_events_rdd(self.spark_context, files_rdd)
+        try:
+            processing_response = PySparkPlaso.action_events_rdd_by_saving_into_halyard(
+                self.spark_context, events_rdd, "test", "zookeeper", 2181)
+            result = Response(
+                response="Processing of events from '%s' and their uploading into Halyard took %d nanoseconds."
+                         % (hdfs_path, processing_response),
+                status=200,
+                mimetype="text/plain")
+        except Exception as e:
+            result = Response(
+                response="Error on the extraction: %s" % e,
+                status=400,
+                mimetype="text/plain")
         return result

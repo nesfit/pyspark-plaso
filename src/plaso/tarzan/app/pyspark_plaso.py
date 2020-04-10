@@ -3,7 +3,6 @@
 
 from __future__ import unicode_literals
 
-
 import json
 from pyspark import SparkContext
 from pyspark.mllib.common import _py2java
@@ -78,7 +77,7 @@ class PySparkPlaso(object):
 
     @staticmethod
     def action_events_rdd_by_saving_into_halyard(sc, events_rdd, table_name, hbase_zk_quorum, hbase_zk_port):
-        # type: (SparkContext, RDD, str, str, int) -> None
+        # type: (SparkContext, RDD, str, str, int) -> int
         """
         Save the content of a given RDD with (HDFS URI, event) pairs into Halyard into a given table.
         :param sc: Spark Context of the RDD
@@ -86,10 +85,11 @@ class PySparkPlaso(object):
         :param table_name: Halyard repository HBase table name
         :param hbase_zk_quorum: HBase Zookeeper quorum of HBase config path
         :param hbase_zk_port: the Zookeeper client port
+        :return: the processing time in nanoseconds
         """
         java_events_rdd = _py2java(sc, events_rdd)
         halyard_rdd_class = PySparkPlaso.get_java_rdd_helpers_package(sc).HalyardRDD
-        halyard_rdd_class.saveToHalyard(java_events_rdd, table_name, hbase_zk_quorum, hbase_zk_port)
+        return halyard_rdd_class.saveToHalyard(java_events_rdd, table_name, hbase_zk_quorum, hbase_zk_port)
 
     @staticmethod
     def json_dumper(obj):
@@ -99,7 +99,7 @@ class PySparkPlaso(object):
         :param obj: the object to dump
         """
         import inspect
-        # a vriable without a dictionary is just converted to string
+        # a variable without a dictionary is just converted to string
         if not hasattr(obj, '__dict__'):
             return str(obj)
         # otherwise, use the dictionary
@@ -118,11 +118,11 @@ class PySparkPlaso(object):
         :return the RDD of JSON documents
         """
         json_dumps_rdd = events_rdd.map(lambda event: json.dumps(event,
-            default=PySparkPlaso.json_dumper,
-            indent=2,
-            separators=(',', ': '),
-            sort_keys=True
-        ))
+                                                                 default=PySparkPlaso.json_dumper,
+                                                                 indent=2,
+                                                                 separators=(',', ': '),
+                                                                 sort_keys=True
+                                                                 ))
         return json_dumps_rdd
 
     @staticmethod
