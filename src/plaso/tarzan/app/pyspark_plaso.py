@@ -87,9 +87,10 @@ class PySparkPlaso(object):
         :param hbase_zk_port: the Zookeeper client port
         :return: the processing time in nanoseconds
         """
-        java_events_rdd = _py2java(sc, events_rdd)
+        json_dumps_rdd = PySparkPlaso.transform_events_rdd_into_json_rdd(events_rdd)
+        java_json_dumps_rdd = _py2java(sc, json_dumps_rdd)
         halyard_rdd_class = PySparkPlaso.get_java_rdd_helpers_package(sc).HalyardRDD
-        return halyard_rdd_class.saveToHalyard(java_events_rdd, table_name, hbase_zk_quorum, hbase_zk_port)
+        return halyard_rdd_class.saveToHalyard(java_json_dumps_rdd, table_name, hbase_zk_quorum, hbase_zk_port)
 
     @staticmethod
     def json_dumper(obj):

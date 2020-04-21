@@ -60,9 +60,13 @@ class PlasoController(Controller):
         try:
             processing_response = PySparkPlaso.action_events_rdd_by_saving_into_halyard(
                 self.spark_context, events_rdd, "test", "zookeeper", 2181)
+            seconds = processing_response / (1000000 * 1000)
+            nanoseconds = processing_response % (1000000 * 1000)
+            minutes = seconds / 60
+            seconds = seconds % 60
             result = Response(
-                response="Processing of events from '%s' and their uploading into Halyard took %d nanoseconds."
-                         % (hdfs_path, processing_response),
+                response="Processing of events from path '%s' and their uploading into Halyard took %d:%02d.%09d minutes:seconds.nanoseconds."
+                         % (hdfs_path, minutes, seconds, nanoseconds),
                 status=200,
                 mimetype="text/plain")
         except Exception as e:
