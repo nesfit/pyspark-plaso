@@ -16,6 +16,9 @@
 		.table tr .a a {
 			padding: 0 0.25em;
 		}
+		.exec-content .form-group {
+			padding: 1em;
+		}
 	</style>
 	<title>pyspark-plaso</title>
 </head>
@@ -119,7 +122,17 @@
 	<div class="tab-content exec-content">
 		<form>
 			<div class="form-group">
+				Extract the events and display JSON output:
 				<input type="button" class="btn btn-primary" value="Execute extraction" id="buttonExec">
+				(opens in a new window)
+			</div>
+			<div class="form-group">
+				Extract the events and export to TimelineAnalyzer repository:
+				<input type="button" class="btn btn-primary" value="Extract and export" id="buttonExecExport">
+				<span id="export-progress"></span>
+			</div>
+			<div class="form-group">
+				<a href="https://gort.fit.vutbr.cz/ta/" target="_blank">Open TimelineAnalyzer</a> (opens in a new window)
 			</div>
 		</form>
 	</div>

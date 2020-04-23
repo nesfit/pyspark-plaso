@@ -230,7 +230,7 @@ $(function(){
 			.catch(error => {
 				console.error(error)
 				showMsg($('#messagesUploadFile'), 'alert-error', error);
-			})
+			});
 	});
 
 	$('#buttonUploadZip').click(function() {
@@ -244,11 +244,22 @@ $(function(){
 			.catch(error => {
 				console.error(error)
 				showMsg($('#messagesUploadZip'), 'alert-error', error);
-			})
+			});
 	});
 
 	$('#buttonExec').click(function() {
 		runExtraction(getCwd());
+	});
+
+	$('#buttonExecExport').click(function() {
+		$('#export-progress').text('Extraction in progress...');
+		client.runExport(getCwd())
+			.then(() => {
+				$('#export-progress').text('Export finished.');
+			})
+			.catch(error => {
+				$('#export-progress').text('Export failed: ' + error);
+			});
 	});
 
 	refresh(currentHdfsPath);

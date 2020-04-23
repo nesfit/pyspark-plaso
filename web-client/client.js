@@ -77,4 +77,9 @@ class ApiClient {
 			.catch((error) => console.error(error));
 	}
 
+	async runExport(hdfsPath) {
+		const response = await fetch(this.API_ROOT + 'extract-to-halyard' + hdfsPath);
+		return await response.text();
+	}
+
 }
