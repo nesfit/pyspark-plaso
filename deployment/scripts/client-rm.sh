@@ -17,7 +17,7 @@ fi
 function remove() {
 	FROM="${1}"
 	echo "### Removing ${FROM}" >&2
-	curl "${URL}rm/${FROM}"
+	curl "${URL}api/rm/${FROM}"
 	echo
 }
 

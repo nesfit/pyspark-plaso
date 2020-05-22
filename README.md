@@ -1,6 +1,6 @@
 # pyspark-plaso
 
-(c) 2018-2019 Marek Rychly (rychly@fit.vutbr.cz) and Radek Burget (burgetr@fit.vutbr.cz)
+(c) 2018-2020 Marek Rychly (rychly@fit.vutbr.cz) and Radek Burget (burgetr@fit.vutbr.cz)
 
 A tool for distributed extraction of timestamps from various files using extractors adapted from the Plaso engine to Apache Spark.
 

@@ -36,12 +36,12 @@ function upload() {
 		echo "### Packing ${FROM} directory into ZIP file ${ZIP}" >&2
 		myzip "${ZIP}" "${FROM}"
 		echo "### Uploading ZIP file ${ZIP} into ${TO}" >&2
-		curl "${URL}zip/${TO}" --upload-file "${ZIP}"
+		curl "${URL}api/zip/${TO}" --upload-file "${ZIP}"
 		echo
 	else
 		# single file
 		echo "### Uploading file ${FROM} into ${TO}" >&2
-		curl "${URL}file/${TO}" --upload-file "${FROM}"
+		curl "${URL}api/file/${TO}" --upload-file "${FROM}"
 		echo
 	fi
 }

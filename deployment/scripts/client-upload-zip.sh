@@ -18,7 +18,7 @@ function upload() {
 	TO="${1}"
 	FROM="${2}"
 	echo "### Uploading ZIP file ${FROM} into ${TO}" >&2
-	curl "${URL}zip/${TO}" --upload-file "${FROM}"
+	curl "${URL}api/zip/${TO}" --upload-file "${FROM}"
 	echo
 }
 

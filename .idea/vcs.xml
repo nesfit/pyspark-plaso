@@ -7,5 +7,8 @@
     <mapping directory="$PROJECT_DIR$/java-helpers/build/timeline-analyzer-builder/rdf4j-vocab-builder" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/java-helpers/build/timeline-analyzer-builder/sqljet" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/java-helpers/build/timeline-analyzer-builder/timeline-analyzer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/java-helpers/deps/rdf4j-class-builder" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/java-helpers/deps/rdf4j-vocab-builder" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/java-helpers/deps/timeline-analyzer" vcs="Git" />
   </component>
 </project>

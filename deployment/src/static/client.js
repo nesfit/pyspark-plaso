@@ -1,7 +1,8 @@
 
 class ApiClient {
 
-	API_ROOT = 'https://gort.fit.vutbr.cz/pp/';
+	// there can be some issues with a relative URL, see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Cross-global_fetch_usage
+	API_ROOT = './api/';
 
 
 	async getLs(hdfsPath) {

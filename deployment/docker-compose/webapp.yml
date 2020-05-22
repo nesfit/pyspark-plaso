@@ -10,7 +10,7 @@ services:
       - MASTER_URL=spark://sparkmaster:7077
       - SPARK_JARS=/app/lib
       - SPARK_PYFILES=/app/lib
-      - SPARK_APP=/app/main.py
+      - SPARK_APP=/app/webapp_main.py
       - WEBUI_PORT=4040
     ports:
       - "54380:54380"

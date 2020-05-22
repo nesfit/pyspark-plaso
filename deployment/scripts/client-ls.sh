@@ -17,7 +17,7 @@ fi
 function list() {
 	FROM="${1}"
 	echo "### Listing ${FROM}" >&2
-	curl "${URL}ls/${FROM}"
+	curl "${URL}api/ls/${FROM}"
 	echo
 }
 

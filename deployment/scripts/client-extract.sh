@@ -17,7 +17,7 @@ fi
 function extract() {
 	FROM="${1}"
 	echo "### Extracting ${FROM}" >&2
-	curl "${URL}extract/${FROM}"
+	curl "${URL}api/extract/${FROM}"
 	echo
 }
 

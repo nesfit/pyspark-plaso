@@ -18,9 +18,9 @@ function download() {
 	TO="${1}"
 	FROM="${2}"
 	echo "### Downloading file ${FROM} into ${TO}" >&2
-	#wget --content-disposition -P "${TO}" "${URL}file/${FROM}"
+	#wget --content-disposition -P "${TO}" "${URL}api/file/${FROM}"
 	# curl: the first try to download and detect an error, the second try get the error message
-	( cd "${TO}" && curl --fail -OJ "${URL}file/${FROM}" || curl "${URL}file/${FROM}" )
+	( cd "${TO}" && curl --fail -OJ "${URL}api/file/${FROM}" || curl "${URL}api/file/${FROM}" )
 	echo
 }
 
