@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose/webapp.yml -o webapp
+    kompose.version: 1.20.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: zookeeper
+  name: zookeeper
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose/webapp.yml -o webapp
+        kompose.version: 1.20.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: zookeeper
+    spec:
+      containers:
+      - env:
+        - name: ROLE
+          value: zookeeper
+        - name: ZOO_DATA_DIR
+          value: /home/hbase/zk-data
+        - name: ZOO_DATA_LOG_DIR
+          value: /home/hbase/zk-data-log
+        - name: ZOO_PORT
+          value: "2181"
+        image: registry.gitlab.com/rychly-edu/docker/docker-hbase:2.2.0
+        name: zookeeper
+        resources: {}
+        volumeMounts:
+        - mountPath: /home/hbase/zk-data
+          name: zookeeper-claim0
+        - mountPath: /home/hbase/zk-data-log
+          name: zookeeper-claim1
+      restartPolicy: Always
+      volumes:
+      - name: zookeeper-claim0
+        persistentVolumeClaim:
+          claimName: zookeeper-claim0
+      - name: zookeeper-claim1
+        persistentVolumeClaim:
+          claimName: zookeeper-claim1
+status: {}

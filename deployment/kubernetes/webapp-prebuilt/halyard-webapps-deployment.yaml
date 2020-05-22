@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose/webapp-prebuilt.yml -o webapp-prebuilt
+    kompose.version: 1.20.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: halyard-webapps
+  name: halyard-webapps
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose/webapp-prebuilt.yml -o webapp-prebuilt
+        kompose.version: 1.20.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: halyard-webapps
+    spec:
+      containers:
+      - env:
+        - name: JETTY_PORT
+          value: "8082"
+        - name: ROOT_DIR
+          value: hdfs://namenode:8020/user/hbase
+        - name: ZOO_PORT
+          value: "2181"
+        - name: ZOO_SERVERS
+          value: zookeeper
+        image: registry.gitlab.com/rychly-edu/docker/docker-halyard-webapps:3.0-hadoop3.1-hbase2.2
+        name: halyard-webapps
+        resources: {}
+      restartPolicy: Always
+status: {}

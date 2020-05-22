@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose/webapp-prebuilt.yml -o webapp-prebuilt
+    kompose.version: 1.20.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sparkworker
+  name: sparkworker
+spec:
+  ports:
+  - name: "54042"
+    port: 54042
+    targetPort: 4040
+  selector:
+    io.kompose.service: sparkworker
+status:
+  loadBalancer: {}

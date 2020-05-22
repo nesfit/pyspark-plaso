@@ -41,6 +41,8 @@ in pkgs.stdenv.mkDerivation rec {
     docker docker-compose
     # control API and fetch deps
     curl p7zip
+    # convert docker-compose to kubernetes
+    kompose
   ];
 
   shellHook = ''

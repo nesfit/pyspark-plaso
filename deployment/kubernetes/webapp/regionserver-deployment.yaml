@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose/webapp.yml -o webapp
+    kompose.version: 1.20.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: regionserver
+  name: regionserver
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose/webapp.yml -o webapp
+        kompose.version: 1.20.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: regionserver
+    spec:
+      containers:
+      - env:
+        - name: REGIONSERVER_INFO_PORT
+          value: "16030"
+        - name: REGIONSERVER_PORT
+          value: "16020"
+        - name: ROLE
+          value: regionserver
+        - name: ROOT_DIR
+          value: hdfs://namenode:8020/user/hbase
+        - name: WAIT_FOR
+          value: namenode:8020
+        - name: ZOO_PORT
+          value: "2181"
+        - name: ZOO_SERVERS
+          value: zookeeper
+        image: registry.gitlab.com/rychly-edu/docker/docker-hbase:2.2.0
+        name: regionserver
+        resources: {}
+      restartPolicy: Always
+status: {}

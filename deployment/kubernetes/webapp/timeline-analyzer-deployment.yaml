@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose/webapp.yml -o webapp
+    kompose.version: 1.20.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: timeline-analyzer
+  name: timeline-analyzer
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose/webapp.yml -o webapp
+        kompose.version: 1.20.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: timeline-analyzer
+    spec:
+      containers:
+      - env:
+        - name: NGINX_PORT
+          value: "8081"
+        - name: RDF4J_SERVER_HOST
+          value: halyard-webapps
+        - name: RDF4J_SERVER_PORT
+          value: "8082"
+        - name: RDF4J_WORKBENCH_HOST
+          value: halyard-webapps
+        - name: RDF4J_WORKBENCH_PORT
+          value: "8082"
+        image: registry.gitlab.com/rychly-edu/docker/docker-timeline-analyzer
+        name: timeline-analyzer
+        ports:
+        - containerPort: 8081
+        resources: {}
+      restartPolicy: Always
+status: {}

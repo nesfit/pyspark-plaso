@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose/webapp-prebuilt.yml -o webapp-prebuilt
+    kompose.version: 1.20.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sparkapp
+  name: sparkapp
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose/webapp-prebuilt.yml -o webapp-prebuilt
+        kompose.version: 1.20.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: sparkapp
+    spec:
+      containers:
+      - env:
+        - name: MASTER_URL
+          value: spark://sparkmaster:7077
+        - name: WEBUI_PORT
+          value: "4040"
+        image: registry.gitlab.com/rychly-edu/projects/pyspark-plaso:1.0-snapshot_spark2.4-hadoop3.1
+        name: sparkapp
+        ports:
+        - containerPort: 54380
+        - containerPort: 4040
+        resources: {}
+      restartPolicy: Always
+status: {}

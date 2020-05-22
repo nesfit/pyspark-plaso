@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose/webapp.yml -o webapp
+    kompose.version: 1.20.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sparkapp
+  name: sparkapp
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose/webapp.yml -o webapp
+        kompose.version: 1.20.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: sparkapp
+    spec:
+      containers:
+      - env:
+        - name: MASTER_URL
+          value: spark://sparkmaster:7077
+        - name: SPARK_APP
+          value: /app/webapp_main.py
+        - name: SPARK_JARS
+          value: /app/lib
+        - name: SPARK_PYFILES
+          value: /app/lib
+        - name: WEBUI_PORT
+          value: "4040"
+        image: registry.gitlab.com/rychly-edu/docker/docker-spark-app:spark2.4-hadoop3.1
+        name: sparkapp
+        ports:
+        - containerPort: 54380
+        - containerPort: 4040
+        resources: {}
+        volumeMounts:
+        - mountPath: /app
+          name: sparkapp-claim0
+          readOnly: true
+      restartPolicy: Always
+      volumes:
+      - name: sparkapp-claim0
+        persistentVolumeClaim:
+          claimName: sparkapp-claim0
+          readOnly: true
+status: {}

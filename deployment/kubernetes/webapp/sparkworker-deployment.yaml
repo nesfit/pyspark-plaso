@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose/webapp.yml -o webapp
+    kompose.version: 1.20.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sparkworker
+  name: sparkworker
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose/webapp.yml -o webapp
+        kompose.version: 1.20.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: sparkworker
+    spec:
+      containers:
+      - env:
+        - name: INSTALL_PKGS
+          value: python-libfwsi python-libregf
+        - name: MASTER_URL
+          value: spark://sparkmaster:7077
+        - name: ROLE
+          value: worker
+        - name: WEBUI_PORT
+          value: "4040"
+        image: registry.gitlab.com/rychly-edu/docker/docker-spark:2.4.4-hadoop3.1
+        name: sparkworker
+        ports:
+        - containerPort: 4040
+        resources: {}
+      restartPolicy: Always
+status: {}

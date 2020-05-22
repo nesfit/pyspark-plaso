@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose/webapp-prebuilt.yml -o webapp-prebuilt
+    kompose.version: 1.20.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sparkmaster
+  name: sparkmaster
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose/webapp-prebuilt.yml -o webapp-prebuilt
+        kompose.version: 1.20.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: sparkmaster
+    spec:
+      containers:
+      - env:
+        - name: MASTER_PORT
+          value: "7077"
+        - name: ROLE
+          value: master
+        - name: WEBUI_PORT
+          value: "4040"
+        image: registry.gitlab.com/rychly-edu/docker/docker-spark:2.4.4-hadoop3.1
+        name: sparkmaster
+        ports:
+        - containerPort: 4040
+        resources: {}
+      restartPolicy: Always
+status: {}
