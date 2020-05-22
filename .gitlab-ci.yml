@@ -67,18 +67,18 @@
     - if [[ -n "${DOCKER_USERNAME}" ]]; then echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin docker.io; fi
 
 stages:
-  - build_java_helpers_deps
-  - build_java_helpers_and_python_sp
-  - build_docker_image
-  - release_docker_image
+  - build_deps
+  - build
+  - build_docker
+  - release_docker
 
 variables:
   # all submodules (including submodules of submodules) will be included, see https://docs.gitlab.com/ce/ci/yaml/README.html#git-submodule-strategy
   GIT_SUBMODULE_STRATEGY: "recursive"
 
-build_java_helpers_deps:
+build_deps:java_helpers:
   extends: .maven
-  stage: build_java_helpers_deps
+  stage: build_deps
   script:
     - cd java-helpers
     - ./build-deps.sh
@@ -86,9 +86,11 @@ build_java_helpers_deps:
     paths:
       - java-helpers/build/libs/*.jar
 
-build_java_helpers_main:
+build:java_helpers:
   extends: .gradle
-  stage: build_java_helpers_and_python_sp
+  stage: build
+  dependencies:
+    - build_deps:java_helpers
   script:
     - cd java-helpers
     - ./gradlew --build-cache build
@@ -96,9 +98,9 @@ build_java_helpers_main:
     paths:
       - java-helpers/build/libs/*.jar
 
-build_python_sp:
+build:python_site_packages:
   extends: .python
-  stage: build_java_helpers_and_python_sp
+  stage: build
   script:
     - cd deployment
     - ./010-make-python-virtualenv.sh
@@ -107,22 +109,23 @@ build_python_sp:
     paths:
       - deployment/build/*.zip
 
-build_docker:
+build_docker:webapp:
   extends: .docker_image
-  stage: build_docker_image
+  stage: build_docker
   dependencies:
-    - build_app
+    - build:java_helpers
+    - build:python_site_packages
   script:
     - cd deployment/docker
     - ./fetch-app.sh
     - ./build.sh --build=Dockerfile "${CI_REGISTRY_IMAGE}" "${TAG_FINAL}" "${TAG_PREFIX}"
     - ./build.sh --push "${CI_REGISTRY_IMAGE}" "${TAG_FINAL}" "${TAG_PREFIX}"
 
-release_docker:
+release_docker:webapp:
   extends: .docker_image
-  stage: release_docker_image
+  stage: release_docker
   dependencies:
-    - build_docker
+    - build_docker:webapp
   only:
     - master
   script:
