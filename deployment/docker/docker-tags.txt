@@ -1,0 +1,3 @@
+# tags (before "\t") and build arguments (after "\t", separated by " " which cannot be utilised otherwise) of the Docker image variants to build
+# hadoop 3.2.0 bug: missing lib/native/lihdfs.so, so cannot use pyarrow hdfs -> use hadoop 3.1.*
+1.0-snapshot_spark2.4-hadoop3.1	FROM_TAG=spark2.4-hadoop3.1

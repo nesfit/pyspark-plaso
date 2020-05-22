@@ -1,22 +1,22 @@
 # this Nix script is utilized to initialize the environment including required dependencies
 
 let
+
+  name = "pyspark-plaso-deployment";
+
   # Enable overlays (refer to the package being modified via `super` and to packages it uses via `cls`)
   # See https://gist.github.com/mayhewluke/e2f67c65c2e135f16a8e
   # NixOS v19.03: Spark v2.2.1 using Scala v2.11.8, OpenJDK 64-Bit v1.8.0_212
   # NixOS v19.09: Spark v2.4.3 using Scala v2.11.12, OpenJDK 64-Bit v1.8.0_212
+  # NixOS v20.03: Spark v2.4.4 using Scala v???; but Mesos is broken, see https://github.com/NixOS/nixpkgs/issues/78557
   sparkOverlay = cls: super: {
     spark = (super.spark.override {
-      version = "2.4.3";
-    }).overrideAttrs(oldAttrs: rec {
-      src = super.fetchzip {
-        sha256 = "1dvvr1q3dz961bl7qigxngrp4ssrbll3g1s6nkra6gyr83pis96c";
-        url = "mirror://apache/spark/${oldAttrs.name}/${oldAttrs.name}-bin-without-hadoop.tgz";
-      };
+      RSupport = false;
+      mesosSupport = false;
     });
   };
   overlays = [
-    #sparkOverlay	# no need in NixOS v19.09
+    sparkOverlay	# no need in NixOS v20.03 for broken Mesos
   ];
 
 in
@@ -31,10 +31,17 @@ let
 
 in pkgs.stdenv.mkDerivation rec {
 
-  name = "spark-python-env";
-  inherit env;
+  inherit name env;
 
-  buildInputs = [ env pkgs.jdk pkgs.gradle pkgs.maven pkgs.docker pkgs.docker-compose pkgs.curl pkgs.p7zip ];
+  buildInputs = with pkgs; [
+    env
+    # build the application
+    jdk gradle maven
+    # build Docker image
+    docker docker-compose
+    # control API and fetch deps
+    curl p7zip
+  ];
 
   shellHook = ''
     # disable custom Java options imported from the system environment
