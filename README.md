@@ -10,7 +10,13 @@ The PySpark Plaso is running in a Docker container and it is accessible as a Web
 
 See the project Wiki Pages for details.
 
-## Build and Deployment
+## Use a Prebuilt Docker Image
+
+There is [a prebuilt Docker image](https://gitlab.com/rychly-edu/projects/pyspark-plaso/container_registry).
+
+See the [webapp-prebuilt.yml](deployment/docker-compose/webapp-prebuilt.yml) docker-compose file.
+
+## Build and Deploy
 
 ~~~
 cd ./deployment
@@ -24,7 +30,7 @@ cd ./deployment
 ./040-run-docker-webapp.sh
 ~~~
 
-See the project Wiki Pages for details.
+See the project Wiki Pages for details and also the [webapp.yml](deployment/docker-compose/webapp.yml) docker-compose file.
 
 ## Dependencies
 

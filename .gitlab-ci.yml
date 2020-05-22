@@ -49,6 +49,7 @@
       - .cache/pip
   before_script:
     - pip install virtualenv
+    - apk add --no-cache g++ make
 
 .docker_image:
   image: docker:latest
@@ -104,6 +105,7 @@ build:python_site_packages:
   script:
     - cd deployment
     - ./010-make-python-virtualenv.sh
+    - apk add --no-cache p7zip
     - ./020-make-site-packages-zip.sh
   artifacts:
     paths:
@@ -129,7 +131,7 @@ release_docker:webapp:
   only:
     - master
   script:
-    - cd docker
+    - cd deployment/docker
     - ./build.sh --pull "${CI_REGISTRY_IMAGE}" "${TAG_FINAL}" "${TAG_PREFIX}"
     - ./build.sh --tag "${CI_REGISTRY_IMAGE}${DOCKER_REPOS:+ ${DOCKER_REPOS}}${DOCKER_USERNAME:+ docker.io/${DOCKER_USERNAME}/${CI_PROJECT_NAME#docker-}}" "${TAG_FINAL}" "${TAG_PREFIX}"
     - ./build.sh --push "${CI_REGISTRY_IMAGE}${DOCKER_REPOS:+ ${DOCKER_REPOS}}${DOCKER_USERNAME:+ docker.io/${DOCKER_USERNAME}/${CI_PROJECT_NAME#docker-}}" "${TAG_FINAL}" "${TAG_PREFIX}"
