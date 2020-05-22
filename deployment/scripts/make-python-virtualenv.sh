@@ -15,7 +15,8 @@ fi
 echo "Creating VirtualEnv directory ${VENV_NAME}" >&2
 # use python from PATH as with the symlink in ./build, python thinks sys.prefix is wrong
 virtualenv --clear --python=python "${VENV_NAME}"
-virtualenv --relocatable "${VENV_NAME}"
+# virtualenv --relocatable has been removed since virtualenv v20, we use a custom script
+${DIRNAME}/../virtualenv/relocate_virtualenv.py "${VENV_NAME}"
 
 echo "Installing required Python packages into VirtualEnv directory ${VENV_NAME}" >&2
 source "${VENV_NAME}/bin/activate"
