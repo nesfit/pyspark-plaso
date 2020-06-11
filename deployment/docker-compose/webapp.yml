@@ -12,6 +12,9 @@ services:
       - SPARK_PYFILES=/app/lib
       - SPARK_APP=/app/webapp_main.py
       - WEBUI_PORT=4040
+      - PP_HDFS_URI=hdfs://hadoop@namenode:8020/test_data
+      - PP_HOST=0.0.0.0
+      - PP_PORT=54380
     ports:
       - "54380:54380"
       - "54040:4040"

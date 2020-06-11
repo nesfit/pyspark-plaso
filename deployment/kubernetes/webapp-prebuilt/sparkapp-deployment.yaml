@@ -26,6 +26,12 @@ spec:
           value: spark://sparkmaster:7077
         - name: WEBUI_PORT
           value: "4040"
+        - name: PP_HDFS_URI
+          value: hdfs://hadoop@namenode:8020/test_data
+        - name: PP_HOST
+          value: 0.0.0.0
+        - name: PP_PORT
+          value: 54380
         image: registry.gitlab.com/rychly-edu/projects/pyspark-plaso:1.0-snapshot_spark2.4-hadoop3.1
         name: sparkapp
         ports:
