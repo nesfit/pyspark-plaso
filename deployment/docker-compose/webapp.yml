@@ -15,6 +15,8 @@ services:
       - PP_HDFS_URI=hdfs://hadoop@namenode:8020/test_data
       - PP_HOST=0.0.0.0
       - PP_PORT=54380
+      - WAIT_FOR=namenode:8020
+      - MAKE_HDFS_DIRS=hdfs://hadoop@namenode:8020/test_data?user=spark&perms=1777
     ports:
       - "54380:54380"
       - "54040:4040"

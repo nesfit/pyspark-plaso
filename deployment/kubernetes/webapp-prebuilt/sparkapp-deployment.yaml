@@ -32,6 +32,10 @@ spec:
           value: 0.0.0.0
         - name: PP_PORT
           value: 54380
+        - name: WAIT_FOR
+          value: namenode:8020
+        - name: MAKE_HDFS_DIRS
+          value: hdfs://hadoop@namenode:8020/test_data?user=spark&perms=1777
         image: registry.gitlab.com/rychly-edu/projects/pyspark-plaso:1.0-snapshot_spark2.4-hadoop3.1
         name: sparkapp
         ports:
