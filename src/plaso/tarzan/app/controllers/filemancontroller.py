@@ -5,15 +5,14 @@ from __future__ import unicode_literals
 import json
 import sys
 import zipfile
+from controller import Controller
+from flask import Response, Request, send_file
 from functools import reduce
 from io import BytesIO  # Python 3 way that should work also in Python 2
 from os.path import basename, dirname
+from pyarrow.lib import ArrowIOError
 from tempfile import mkstemp
 
-from flask import Response, Request, send_file
-from pyarrow.lib import ArrowIOError
-
-from controller import Controller
 from plaso.tarzan.lib.pyarrow_hdfs import PyArrowHdfs
 
 
@@ -191,7 +190,8 @@ class FileManController(Controller):
         """
         # https://flask.palletsprojects.com/en/master/api/#flask.Response
         return original if reduced is None else Response(
-            response=reduced.data + "\n" + original.data,
+            # concatenate two UTF-8 decoded texts to prevent UnicodeDecodeError, see https://docs.python.org/2.7/howto/unicode.html#tips-for-writing-unicode-aware-programs
+            response=reduced.get_data(as_text=True) + "\n" + original.get_data(as_text=True),
             status=max(reduced.status_code, original.status_code),
             mimetype=reduced.mimetype
         )
@@ -207,9 +207,18 @@ class FileManController(Controller):
         try:
             result = []
             with zipfile.ZipFile(BytesIO(zip_data)) as zip_file:
-                for name in zip_file.namelist():
-                    with zip_file.open(name, 'r') as input_stream:
-                        file_name = hdfs_uri + "/" + name
+                for zipinfo in zip_file.infolist():
+                    # decode ZIP filename, see https://stackoverflow.com/a/37773438
+                    # see https://github.com/python/cpython/blob/2.7/Lib/zipfile.py#L882 and https://github.com/python/cpython/blob/2.7/Lib/zipfile.py#L400
+                    if zipinfo.flag_bits & 0x800:
+                        # UTF-8 file names extension, so the filename is already decoded to Unicode
+                        zipname = zipinfo.filename
+                    else:
+                        # historical ZIP filename encoding by default (however, non-standard implementation can use different encodings)
+                        zipname = zipinfo.filename.decode('cp437', errors='ignore')
+                    # HDFS filename based on the path and the filename form ZIP
+                    file_name = hdfs_uri + "/" + zipname
+                    with zip_file.open(zipinfo, 'r') as input_stream:
                         result.append(self.__upload_streamed_content(input_stream, file_name))
             return reduce(self.__reduce_responses, result)
         except (zipfile.BadZipfile, zipfile.LargeZipFile) as e:
