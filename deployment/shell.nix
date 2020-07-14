@@ -2,8 +2,6 @@
 
 let
 
-  name = "pyspark-plaso-deployment";
-
   # Enable overlays (refer to the package being modified via `super` and to packages it uses via `cls`)
   # See https://gist.github.com/mayhewluke/e2f67c65c2e135f16a8e
   # NixOS v19.03: Spark v2.2.1 using Scala v2.11.8, OpenJDK 64-Bit v1.8.0_212
@@ -27,14 +25,11 @@ in
 let
   # Python from Spark
   sparkPython = builtins.head (builtins.filter (pkg: builtins.hasAttr "pname" pkg && pkg.pname == "python") pkgs.spark.buildInputs);
-  env = sparkPython.withPackages(ps: with ps; [ virtualenv pip ]);
 
-in pkgs.stdenv.mkDerivation rec {
-
-  inherit name env;
+in pkgs.mkShell rec {
 
   buildInputs = with pkgs; [
-    env
+    (sparkPython.withPackages(ps: with ps; [ virtualenv pip ]))
     # build the application
     jdk gradle maven
     # build Docker image
