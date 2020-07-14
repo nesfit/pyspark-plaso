@@ -2,7 +2,8 @@
 # https://docs.gitlab.com/ce/ci/variables/README.html
 
 .gradle:
-  image: adoptopenjdk/openjdk11:alpine-slim
+  # cannot use adoptopenjdk/openjdk11:alpine-slim as the hadoop-base use JDK 8 which cannot read JDK 11 class files; error: java.lang.UnsupportedClassVersionError: tarzan/helpers/rdd/HalyardRDD has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0
+  image: registry.gitlab.com/rychly-edu/docker/docker-adoptopenjdk:jdk-8u-alpine-3.10-slime
   variables:
     # https://gitlab.com/gitlab-org/gitlab-ci-yml/-/blob/master/Gradle.gitlab-ci.yml
     GRADLE_USER_HOME: "${CI_PROJECT_DIR}/.gradle"
@@ -17,7 +18,8 @@
       - .gradle/caches
 
 .maven:
-  image: adoptopenjdk/openjdk11:alpine-slim
+  # cannot use adoptopenjdk/openjdk11:alpine-slim as the hadoop-base use JDK 8 which cannot read JDK 11 class files; error: java.lang.UnsupportedClassVersionError: tarzan/helpers/rdd/HalyardRDD has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0
+  image: registry.gitlab.com/rychly-edu/docker/docker-adoptopenjdk:jdk-8u-alpine-3.10-slime
   variables:
     # https://gitlab.com/gitlab-org/gitlab-ci-yml/-/blob/master/Maven.gitlab-ci.yml
     # This will supress any download for dependencies and plugins or upload messages which would clutter the console log.
